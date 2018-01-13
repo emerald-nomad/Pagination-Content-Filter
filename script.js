@@ -4,8 +4,19 @@ $(document).ready(() => {
     $($('.pagination a')[0]).toggleClass('active', true);
 });
 
-// Adds the pagination unordered list to the DOM.
+// Adds the search form to the page
+$('.page-header').append(`
+    <form class='student-search' id='searchForm'>
+        <input id='search' type="search" placeholder='Search for students...'>
+        <button type='submit' form='searchForm'>Search</button>
+    </form>
+`);
+
+// Adds the pagination unordered list to the page.
 $('.page').append('<div class="pagination"><ul></ul></div>');
+
+$('.pagination ul').prepend('<h1 class="no-results">Sorry no results were found!</h2>');
+$('.no-results').hide();
 
 // Will calculate how many buttons are needed and add them
 // to the pagination unordered list, if there are more than
@@ -20,10 +31,58 @@ if ($('.student-list > li').length > 10) {
     }
 }
 
+
+$('.student-search').submit((e) => {
+    e.preventDefault();
+    // Makes sure no-results message is hidden.
+    $('.no-results').hide();
+
+    // Hides all students.
+    $('.student-list > li').hide();
+
+    // If search query is empty then show no-results message.
+    if ($('#search').val() === '') {
+        $('.no-results').show();
+        return
+    }
+
+    // Stores search query as a regex.
+    let query = new RegExp($('#search').val());
+
+    let shown = 0;
+    
+    // All students name that match the query will be shown.
+    $('.student-list > li > .student-details > h3').each((index,name) => {
+        let str = $(name).text();
+        if (str.match(query)) {
+            $($('.student-list > li')[index]).show();
+            shown++;
+        }
+    });
+
+    // All students email that match the query will be shown.
+    $('.email').each((index, email) => {
+        let str = $(email).text();
+        if (str.match(query)) {
+            $($('.student-list > li')[index]).show();
+            shown++;
+        }
+    });
+
+    // If no results are found show no-results message.
+    if (shown === 0){
+        $('.no-results').show();
+    }
+    $('#search').val('');
+})
+
 // When one of the pagination buttons are click the students
 // associated with that button are displayed on the page.
 $('.pagination a').on('click', (e) => {
     e.preventDefault();
+    // Makes sure no-results message is hidden.
+    $('.no-results').hide();
+
     // Gives the original value of the button.
     btnValue = e.target.text - 1;
 

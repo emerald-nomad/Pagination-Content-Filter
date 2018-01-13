@@ -117,3 +117,10 @@ body{
       background-color: #4ba6c3;
       color: #fff;
     }
+
+.no-results {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 20px;
+}
