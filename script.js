@@ -46,24 +46,26 @@ $('.student-search').submit((e) => {
         return
     }
 
-    // Stores search query as a regex.
-    let query = new RegExp($('#search').val());
+    // A regular expression query for the name.
+    let nameQuery = new RegExp($('#search').val());
+    // A regular expression query for the email.
+    let emailQuery = `/^[${$('#search').val()}]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i`;
 
     let shown = 0;
     
     // All students name that match the query will be shown.
     $('.student-list > li > .student-details > h3').each((index,name) => {
         let str = $(name).text();
-        if (str.match(query)) {
+        if (str.match(nameQuery)) {
             $($('.student-list > li')[index]).show();
             shown++;
         }
     });
 
-    // All students email that match the query will be shown.
+    // All student emails that match the query will be shown.
     $('.email').each((index, email) => {
         let str = $(email).text();
-        if (str.match(query)) {
+        if (str.match(emailQuery)) {
             $($('.student-list > li')[index]).show();
             shown++;
         }
